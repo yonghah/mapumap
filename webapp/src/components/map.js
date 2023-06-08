@@ -135,8 +135,37 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
 
         return tooltipContent;
       }; // renderTooltip end
-
       
+      mapLoci.current.on('dblclick', 'geojsonLoci', (e) => {
+        const id = e.features[0].properties.id; 
+        const matchingFeature = geojsonUmap.features.find(
+          (feature) => feature.properties.id === id); 
+        if (matchingFeature) {
+          // Get the coordinates of the clicked feature
+          const { coordinates } = matchingFeature.geometry;
+          const lngLat = new maplibregl.LngLat(coordinates[0], coordinates[1]);
+          mapUmap.current.flyTo({ center: lngLat, zoom: 17 });
+        } else {
+          console.log("no feature");
+        }
+      });
+      mapUmap.current.on('dblclick', 'geojsonUmap', (e) => {
+        const id = e.features[0].properties.id; 
+        const matchingFeature = geojsonLoci.features.find(
+          (feature) => feature.properties.id === id); 
+        if (matchingFeature) {
+          // Get the coordinates of the clicked feature
+          const { coordinates } = matchingFeature.geometry;
+          const lngLat = new maplibregl.LngLat(coordinates[0], coordinates[1]);
+          mapLoci.current.flyTo({ center: lngLat, zoom: 17 });
+        } else {
+          console.log("no feature");
+        }
+      });
+
+
+
+       
       // mapLoci.current.on('click', 'geojsonLoci', (e) => {
       //   const clickedFeatureId = e.features[0].properties.id; 
       //   console.log("click", clickedFeatureId);
