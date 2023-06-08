@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { ScatterChart, Scatter, XAxis, YAxis, ZAxis, CartesianGrid, Tooltip, Legend,  ResponsiveContainer } from 'recharts';
-import { categoricalColorMap } from './map.js';
 
-const BubbleChart = () => {
+import {
+  categoricalColorMap,
+  colorsTurboArray,
+  obj2flatArray,
+} from "./Util.js";
+
+
+const BubbleChart = ({onTopicClick}) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -17,7 +23,17 @@ const BubbleChart = () => {
     };
     fetchData();
   }, []);
+
+  const onXClick = (e) => {
+    onTopicClick(e.value);
+  };
+ 
+  const onYClick = (e) => {
+    // onPopClick(e.value);
+    onTopicClick('');
+  };
   
+ 
   const renderScatters = () => {
     const topics = [...new Set(data.map(item => item.topic))];
     const populationGroups = [...new Set(data.map(item => item.pop_group))];
@@ -37,19 +53,21 @@ const BubbleChart = () => {
     <ResponsiveContainer width="100%" height="100%">
       <ScatterChart
         margin={{
-          top: 20,
-          right: 10,
+          top: 0,
+          right: 15,
           bottom: 20,
-          left: 5 
+          left: 0 
         }}
       >
         <XAxis 
           type="number" 
           dataKey="topic" 
           name="Topic" 
-          tick={{ fontSize: 11, fill:"#EEE" }}
+          tick={{ fontSize: 13, fill:"#EEE", fontWeight: 'bolder' }}
           interval={0}
+          tickCount={12} 
           orientation="top"
+          onClick={onXClick}
         />
         <YAxis 
           type="category" 
@@ -58,6 +76,7 @@ const BubbleChart = () => {
           tickFormatter={(v)=> v.replace("POP_", "")}
           interval={0}
           reversed={true}
+          onClick={onYClick}
           name="Population Group" />
         <ZAxis type="number" dataKey="value" domain={[0,0.01]} range={[0,200]} />
         <Tooltip cursor={{ strokeDasharray: '3 3' }} />

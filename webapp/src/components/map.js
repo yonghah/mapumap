@@ -5,20 +5,12 @@ import './map.css';
 
 import BubbleChart from './TopicChart.js';
 
-export const categoricalColorMap ={
-    0: '#1f77b4',
-    1: '#ff7f0e',
-    2: '#2ca02c',
-    3: '#d62728',
-    4: '#9467bd',
-    5: '#8c564b',
-    6: '#e377c2',
-    7: '#7f7f7f',
-    8: '#bcbd22',
-    9: '#17becf',
-    10: '#f5b3ae',
-    11: '#a5dea4'
-  };
+import {
+  categoricalColorMap,
+  colorsTurboArray,
+  colorsContinuous,
+  obj2flatArray,
+} from "./Util.js";
 
 export default function DualMap({geojsonLoci, geojsonUmap}){
   const mapContainerLoci = useRef(null);
@@ -28,14 +20,12 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
   const mapUmap = useRef(null);
   // put your maptiler API_KEY here
   const API_KEY = process.env.REACT_APP_API_KEY;  
+  
+  const [selectedTopic, setSelectedTopic] = useState('');
   const [clickedFeatureIds, setClickedFeatureIds] = useState([]);
   const clickedFeatureIdsRef = useRef(clickedFeatureIds);
 
-    const categoricalColorMapArray =
-    Object.entries(categoricalColorMap).flatMap(
-      ([key, value]) => [Number(key), value]);
-
-
+  const categoricalColorMapArray = obj2flatArray(categoricalColorMap);
   
   useEffect(() => {
     clickedFeatureIdsRef.current = clickedFeatureIds;
@@ -86,8 +76,8 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
             ].concat(categoricalColorMapArray, ['#ccc']),
           'circle-radius': [
             'interpolate', ['linear'],
-            ['zoom'], 6, 2, 18, 20, ],
-          'circle-opacity': 0.9, 
+            ['zoom'], 6, 2, 10, 4, 18, 15, ],
+          'circle-opacity': 1.0, 
         },
       });
 
@@ -102,11 +92,6 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
           .setLngLat(coordinates)
           .setHTML(renderTooltip(properties)) 
           .addTo(mapLoci.current);
-
-        // mapLoci.current.on('mouseleave', 'geojsonLoci', () => {
-        //   mapLoci.current.getCanvas().style.cursor = '';
-        //   tooltip.remove();
-        // });
       });
       mapUmap.current.on('click', 'geojsonUmap', (e) => {
         mapUmap.current.getCanvas().style.cursor = 'pointer';
@@ -118,11 +103,6 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
           .setLngLat(coordinates)
           .setHTML(renderTooltip(properties)) 
           .addTo(mapUmap.current);
-
-        // mapUmap.current.on('mouseleave', 'geojsonUmap', () => {
-        //   mapUmap.current.getCanvas().style.cursor = '';
-        //   tooltip.remove();
-        // });
       });
 
       const renderTooltip = (properties) => {
@@ -256,11 +236,44 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
 
   }, []);
 
+  useEffect(()=>{
+
+    const categoricalScale = ['match', 
+      ['get', 'topK']
+    ].concat(categoricalColorMapArray, ['#fff']);
+    const continuousScale = [
+        'interpolate', ['linear'],
+        ['get', `topic_${selectedTopic}`],
+      ].concat([
+      0.0, '#FFF', 
+      0.2, categoricalColorMap[selectedTopic]
+    ]);
+    const colorScale = selectedTopic===''
+      ? categoricalScale 
+      : continuousScale;
+
+    if (mapLoci.current?.getLayer("geojsonLoci")) {
+      mapLoci.current.setPaintProperty(
+        'geojsonLoci', 'circle-color', 
+        colorScale
+        );
+    }
+    if (mapUmap.current?.getLayer("geojsonUmap")) {
+      mapUmap.current.setPaintProperty(
+        'geojsonUmap', 'circle-color', 
+        colorScale
+        );
+    }
+  }, [selectedTopic])
+
+
   return (
     <div className="map-wrap" style={{ display: 'flex' }}>
       <div ref={mapContainerLoci} className="map"></div>
       <div className="gap">
-        <BubbleChart/>
+        <BubbleChart
+          onTopicClick={setSelectedTopic}
+        />
       </div>
       <div ref={mapContainerUmap} className="map"></div>
     </div>
