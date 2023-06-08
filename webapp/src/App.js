@@ -1,6 +1,6 @@
 import React, { useState , useEffect} from 'react';
-import DualMap from './components/map.js';
-import Navbar from './components/navbar.js';
+import DualMap from './Components/Map';
+import Navbar from './Components/Navbar';
 import './App.css';
 
 function App() {
@@ -8,8 +8,8 @@ function App() {
   const [geojsonLoci, setGeojsonLoci] = useState();
   const [geojsonUmap, setGeojsonUmap] = useState();
 
-  const geojsonLociUrl = "/data/location.geojson";
-  const geojsonUmapUrl = "/data/umap.geojson";
+  const geojsonLociUrl = "data/location.geojson";
+  const geojsonUmapUrl = "data/umap.geojson";
   useEffect(()=> {
     fetch(geojsonLociUrl)
       .then((response) => response.json())

@@ -1,16 +1,16 @@
 import React, { useRef, useEffect, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import './map.css';
+import './Map.css';
 
-import BubbleChart from './TopicChart.js';
+import BubbleChart from './TopicChart';
 
 import {
   categoricalColorMap,
   colorsTurboArray,
   colorsContinuous,
   obj2flatArray,
-} from "./Util.js";
+} from "./Util";
 
 export default function DualMap({geojsonLoci, geojsonUmap}){
   const mapContainerLoci = useRef(null);
@@ -20,6 +20,7 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
   const mapUmap = useRef(null);
   // put your maptiler API_KEY here
   const API_KEY = process.env.REACT_APP_API_KEY;  
+  console.log(API_KEY);
   
   const [selectedTopic, setSelectedTopic] = useState('');
   const [clickedFeatureIds, setClickedFeatureIds] = useState([]);

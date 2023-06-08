@@ -5,7 +5,7 @@ import {
   categoricalColorMap,
   colorsTurboArray,
   obj2flatArray,
-} from "./Util.js";
+} from "./Util";
 
 
 const BubbleChart = ({onTopicClick}) => {
