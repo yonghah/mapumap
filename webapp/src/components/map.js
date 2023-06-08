@@ -26,7 +26,8 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
 
   const mapLoci = useRef(null);
   const mapUmap = useRef(null);
-  const API_KEY = 'f8WUI6xEaD92uBjhT7vw';
+  // put your maptiler API_KEY here
+  const API_KEY = process.env.REACT_APP_API_KEY;  
   const [clickedFeatureIds, setClickedFeatureIds] = useState([]);
   const clickedFeatureIdsRef = useRef(clickedFeatureIds);
 
