@@ -1,0 +1,22 @@
+.map-wrap {
+  position: relative;
+  width: 100vw;
+  height: calc(100vh - 77px); /* calculate height of the screen minus the heading */
+}
+
+.map {
+  width: 42vw;
+  height: 100%;
+}
+.highlight {
+  font-weight: bold;
+  color: red;
+}
+.small-indent {
+  padding-left: 20px; /* Adjust the value to your desired indent size */
+}
+.gap {
+  width: 16vw;
+  height: 100%;
+  background-color: #000;
+}
