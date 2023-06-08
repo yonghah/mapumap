@@ -10,6 +10,7 @@ import {
 
 const BubbleChart = ({onTopicClick}) => {
   const [data, setData] = useState([]);
+  const [selectedTopic, setSelectedTopic] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +26,12 @@ const BubbleChart = ({onTopicClick}) => {
   }, []);
 
   const onXClick = (e) => {
-    onTopicClick(e.value);
+    if ( e.value === selectedTopic ) {
+      onTopicClick('');
+    } else {
+      onTopicClick(e.value);
+      setSelectedTopic(e.value);
+    }
   };
  
   const onYClick = (e) => {
