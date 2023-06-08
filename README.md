@@ -13,11 +13,11 @@ $ ./create_location_geojson.sh
 $ ./create_umap_geojson.sh
 ```
 
-It will createe location.geojson and umap.geojson under webapp/public/data.
+It will create location.geojson and umap.geojson under webapp/public/data (already included in the repository).
 Then go to webapp directory 
 
 
 ```
 $ npm install
-$ npm run
+$ npm start 
 ```
