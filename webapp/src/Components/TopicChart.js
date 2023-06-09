@@ -15,7 +15,7 @@ const BubbleChart = ({onTopicClick}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/data/h.json');
+        const response = await fetch('data/h.json');
         const jsonData = await response.json();
         setData(jsonData);
       } catch (error) {
