@@ -3,6 +3,7 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './Map.css';
 
+
 import BubbleChart from './TopicChart';
 
 import {
@@ -37,7 +38,8 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
     console.log(geojsonLoci);
     if (mapLoci.current) return;
     if (mapUmap.current) return;
-    
+      
+    console.log("load loci");
     mapLoci.current = new maplibregl.Map({
       container: mapContainerLoci.current,
       style: `https://api.maptiler.com/maps/basic-v2-light/style.json?key=${API_KEY}`,
@@ -45,6 +47,7 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
       zoom: 7.5, // Initial zoom level
     });
 
+    console.log("load umap");
     mapUmap.current = new maplibregl.Map({
       container: mapContainerUmap.current,
       style: `https://api.maptiler.com/maps/dataviz-light/style.json?key=${API_KEY}`,
@@ -52,12 +55,13 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
       zoom: 12, // Initial zoom level
     });
 
+    console.log("on load event");
     mapLoci.current.on('load', () => {
       console.log("load");
       mapLoci.current.addSource('geojsonLoci', {
         type: 'geojson',
         data: geojsonLoci,
-        generateId: true
+        // generateId: true
       });
       
       mapLoci.current.addLayer({
@@ -106,6 +110,7 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
           .addTo(mapUmap.current);
       });
 
+      console.log("render tooltip");
       const renderTooltip = (properties) => {
         const numTopic = 12;
         const topicValues = [];
@@ -197,7 +202,7 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
       mapUmap.current.addSource('geojsonUmap', {
         type: 'geojson',
         data: geojsonUmap,
-        generateId: true
+        // generateId: true
       });
 
       
