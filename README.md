@@ -1,5 +1,10 @@
 # mapumap
 
+mapumap display geographic map and umap plot side-by-side with NMF factors.
+
+demo: https://yonghah.github.io/mapumap
+
+## Setup 
 After installation, go to project root
 
 ```
