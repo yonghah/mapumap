@@ -21,7 +21,6 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
   const mapUmap = useRef(null);
   // put your maptiler API_KEY here
   const API_KEY = process.env.REACT_APP_API_KEY;  
-  console.log(API_KEY);
   
   const [selectedTopic, setSelectedTopic] = useState('');
   const [clickedFeatureIds, setClickedFeatureIds] = useState([]);
@@ -39,7 +38,6 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
     if (mapLoci.current) return;
     if (mapUmap.current) return;
       
-    console.log("load loci");
     mapLoci.current = new maplibregl.Map({
       container: mapContainerLoci.current,
       style: `https://api.maptiler.com/maps/basic-v2-light/style.json?key=${API_KEY}`,
@@ -47,7 +45,6 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
       zoom: 7.5, // Initial zoom level
     });
 
-    console.log("load umap");
     mapUmap.current = new maplibregl.Map({
       container: mapContainerUmap.current,
       style: `https://api.maptiler.com/maps/dataviz-light/style.json?key=${API_KEY}`,
@@ -55,9 +52,7 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
       zoom: 12, // Initial zoom level
     });
 
-    console.log("on load event");
     mapLoci.current.on('load', () => {
-      console.log("load");
       mapLoci.current.addSource('geojsonLoci', {
         type: 'geojson',
         data: geojsonLoci,
@@ -110,7 +105,6 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
           .addTo(mapUmap.current);
       });
 
-      console.log("render tooltip");
       const renderTooltip = (properties) => {
         const numTopic = 12;
         const topicValues = [];
@@ -198,7 +192,6 @@ export default function DualMap({geojsonLoci, geojsonUmap}){
     }); // mapLoci on load end
 
     mapUmap.current.on('load', () => {
-      console.log("load");
       mapUmap.current.addSource('geojsonUmap', {
         type: 'geojson',
         data: geojsonUmap,
